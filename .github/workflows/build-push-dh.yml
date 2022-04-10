@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Publish Docker Image DH
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +21,3 @@ jobs:
       
     - name: Push the Docker image to Docker Hub    
       run: docker login -u corvinuslucian -p ${{ secrets.DOCKER_TOKEN }} && docker push corvinuslucian/caddy-cf:latest
-      
-    - name: Log into GHCR    
-      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
-      
-    - name: Push the Docker image to GHCR
-      run: |
-        IMAGE_ID=ghcr.io/saltiresoul/caddy-cf:${{ github.run_id }}
-        docker push $IMAGE_ID
