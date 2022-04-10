@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag corvinuslucian/caddy-cf:latest
+    - name: Push the Docker image
+      run: docker login -u corvinuslucian -p ${{ secrets.DOCKER_TOKEN }} && docker push corvinuslucian/caddy-cf:latest
