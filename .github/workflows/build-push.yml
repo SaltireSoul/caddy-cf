@@ -35,7 +35,7 @@ jobs:
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         
       - name: Build & Push Docker image
-        run: docker buildx build -t ghcr.io/${{ github.repository_owner }}/caddy-cf:${GITHUB_SHA} -f ./Dockerfile --push --tag=caddy-cf:latest --platform=linux/arm64,linux/amd64,linux/arm/v7 .
+        run: docker buildx build -t ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} -f ./Dockerfile --push --tag=caddy-cf:latest --platform=linux/arm64,linux/amd64,linux/arm/v7 .
       
       - name: Login to Docker Hub
         env:
@@ -50,4 +50,4 @@ jobs:
           docker container run --rm --net host \
             -v regctl-conf:/home/appuser/.regctl/ \
             -v $HOME/.docker/config.json:/home/appuser/.docker/config.json \
-            regclient/regctl:v0.3.9 image copy ghcr.io/${{ github.repository_owner }}/caddy-cf:${GITHUB_SHA} docker.io/saltiresoul/caddy-cf:latest
+            regclient/regctl:v0.3.9 image copy ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} docker.io/${{ secrets.OWNER_LC }}/caddy-cf:latest
