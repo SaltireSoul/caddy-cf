@@ -1,2 +1,2 @@
 # caddy-cf
-Caddy with Cloudflare
+Caddy with Cloudflare and ACME DNS
