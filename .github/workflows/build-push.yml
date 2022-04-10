@@ -35,7 +35,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         
       - name: Build & Push Docker image
-        run: docker buildx build -t ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} -f ./Dockerfile --push --tag=caddy-cf:latest --platform=linux/amd64,linux/arm64,linux/arm/v7 .
+        run: docker buildx build -t ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} -f ./Dockerfile --push --platform=linux/amd64,linux/arm64,linux/arm/v7 .
       
       - name: Login to Docker Hub
         env:
