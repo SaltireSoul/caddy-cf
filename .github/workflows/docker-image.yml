@@ -15,18 +15,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
+    
+    - name: Build the Docker image    
       run: docker build . --file Dockerfile --tag corvinuslucian/caddy-cf:latest
-    - name: Push the Docker image to Docker Hub
+      
+    - name: Push the Docker image to Docker Hub    
       run: docker login -u corvinuslucian -p ${{ secrets.DOCKER_TOKEN }} && docker push corvinuslucian/caddy-cf:latest
-    - name: set lower case owner name
-      run: |
-        echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-      env:
-        OWNER: '${{ github.repository_owner }}'
-    - name: Log into GHCR
+      
+    - name: Log into GHCR    
       run: echo "${{ secrets.GHCR_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      
     - name: Push the Docker image to GHCR
       run: |
-        IMAGE_ID=ghcr.io/$OWNER_LC/$IMAGE_NAME:${{ github.run_id }}
+        IMAGE_ID=ghcr.io/saltiresoul/caddy-cf:${{ github.run_id }}
         docker push $IMAGE_ID
