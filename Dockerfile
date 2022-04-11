@@ -1,7 +1,14 @@
-FROM caddy:builder-alpine AS builder
+# desired Caddy version
+ARG CADDY_VERSION
 
-RUN xcaddy build --with github.com/caddy-dns/cloudflare --with github.com/caddy-dns/acmedns
+###########
+# builder #
+FROM caddy:${CADDY_VERSION}-builder-alpine AS builder
+ARG CADDY_VERSION
+RUN xcaddy build v${CADDY_VERSION} \
+  --with github.com/caddy-dns/cloudflare
 
-FROM caddy:alpine
-
+#########
+# image #
+FROM caddy:${CADDY_VERSION}-alpine
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy

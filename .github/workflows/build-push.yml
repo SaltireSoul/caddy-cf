@@ -1,8 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Publish Docker image
 
 on:
@@ -30,27 +25,24 @@ jobs:
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      
-      - name: Login to GitHub Package Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
         
-      - name: Build & Push Docker image
-        run: docker buildx build -t ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} -f ./Dockerfile --push --platform=linux/amd64,linux/arm64,linux/arm/v7 .
-        
-      - name: Tag Latest
-        run: docker tag ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:latest
-      
-      - name: Login to Docker Hub
-        env:
-          DH_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${DH_TOKEN}
-        
-      - name: Re-tag & Push Docker Image to Docker Hub
-        run: |
-          # make config.json avaiable to regclient in docker container
-          chmod +r $HOME/.docker/config.json
-          # Run regclient in docker image
-          docker container run --rm --net host \
-            -v regctl-conf:/home/appuser/.regctl/ \
-            -v $HOME/.docker/config.json:/home/appuser/.docker/config.json \
-            regclient/regctl:v0.3.9 image copy ghcr.io/${{ secrets.OWNER_LC }}/caddy-cf:${GITHUB_SHA} docker.io/${{ secrets.OWNER_LC }}/caddy-cf:latest
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+          
+      - name: Build and Push container image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          build-args: CADDY_VERSION=${{ secrets.CADDY_VERSION }}
+          tags: v${{ secrets.CADDY_VERSION }},latest

@@ -1,0 +1,76 @@
+{
+      email {env.CLOUDFLARE_EMAIL}
+}
+
+(cloudflare) {
+      tls email@example.com {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+      }
+}
+
+(add_static_file_serving_features) {
+      # Allow accessing files without requiring .html:
+      try_files {path} {path}.html
+
+      # Enable Static File Server and Directory Browsing:
+      file_server {
+            browse
+            hide .* _*
+      }
+
+      # Enable templating functionality:
+      templates
+
+      # Enable Compression for Output:
+      encode zstd gzip
+
+      handle_errors {
+            respond "<pre>{http.error.status_code} {http.error.status_text}</pre>"
+      }
+}
+
+#Simple Site Hosting
+example.com {
+    root * /path/{host}
+    file_server
+    import cloudflare
+}
+
+#PHP Example
+domain.com {
+    root * /path/{host}
+    #local php: php_fastcgi unix//run/php/php-version-fpm.sock
+    php_fastcgi php-fpm:9000
+    file_server 
+}
+
+#SPA Site
+sub.anotherexample.com {
+      import add_static_file_serving_features
+      import cloudflare
+}
+
+# HTTP->HTTPS redirects
+http://xyz.example, http://api.xyz.example {
+      redir https://{host}{uri}
+}
+
+#Sub Domain Wildcard Cert
+*.example.com {
+      import cloudflare
+
+      @foo host foo.example.com
+      handle @foo {
+            reverse_proxy http://192.168.1.51:8080
+      }
+
+      @bar host bar.example.com
+      handle @bar {
+            respond "Bar!"
+      }
+
+      # Fallback for otherwise unhandled domains
+      handle {
+            abort
+      }
+}
