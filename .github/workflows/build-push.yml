@@ -45,6 +45,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       #https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables=
+      #https://github.com/docker/build-push-action
       - name: Build and Push container image
         uses: docker/build-push-action@v2
         with:

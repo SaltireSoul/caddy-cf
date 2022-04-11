@@ -8,6 +8,11 @@ built for AMD64, ARM64 & ARMv7
 
 Also a few custom environment variables.
 
+![Image Version][shieldversion] ![Image Size][shieldsize]
+
+[shieldsize]: https://img.shields.io/docker/image-size/saltiresoul/caddy-cf?style=for-the-badge
+[shieldversion]: https://img.shields.io/docker/v/saltiresoul/caddy-cf?style=for-the-badge
+
 ```
 docker run -it --name caddy \
   -p 80:80 \
