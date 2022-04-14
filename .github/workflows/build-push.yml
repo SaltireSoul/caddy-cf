@@ -31,6 +31,12 @@ jobs:
         with:
           string: ${{ github.repository }}
 
+      - name: Read file
+        id: read_file
+        uses: bfren/read-file@v1
+        with:
+          file: ./VERSION
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -52,9 +58,9 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-          build-args: CADDY_VERSION=${{ secrets.CADDY_VERSION }}
+          build-args: CADDY_VERSION=${{ steps.read_file.outputs.contents }}
           tags: |
             ${{ steps.lowercase-repo-name.outputs.lowercase }}:latest
-            ${{ steps.lowercase-repo-name.outputs.lowercase }}:${{ secrets.CADDY_VERSION }}
+            ${{ steps.lowercase-repo-name.outputs.lowercase }}:${{ steps.read_file.outputs.contents }}
             ghcr.io/${{ steps.lowercase-repo-name.outputs.lowercase }}:latest
-            ghcr.io/${{ steps.lowercase-repo-name.outputs.lowercase }}:${{ secrets.CADDY_VERSION }}
+            ghcr.io/${{ steps.lowercase-repo-name.outputs.lowercase }}:${{ steps.read_file.outputs.contents }}

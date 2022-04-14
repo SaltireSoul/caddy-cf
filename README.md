@@ -9,8 +9,9 @@ built for AMD64, ARM64 & ARMv7
 Also a few custom environment variables.
 
 ![Image Version][shieldversion] ![Image Size][shieldsize]
+[![Image Docker Hub Registry](https://img.shields.io/static/v1.svg?color=blue&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=saltiresoul&message=Docker%20Registry&logo=docker)](https://hub.docker.com/r/saltiresoul/caddy-cf) [![Image GitHub Registry](https://img.shields.io/static/v1.svg?color=blueviolet&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=saltiresoul&message=GitHub%20Package&logo=github)](https://github.com/SaltireSoul/caddy-cf/pkgs/container/caddy-cf)
 
-[shieldsize]: https://img.shields.io/docker/image-size/saltiresoul/caddy-cf?style=for-the-badge
+[shieldsize]: https://img.shields.io/docker/image-size/saltiresoul/caddy-cf/latest?style=for-the-badge
 [shieldversion]: https://img.shields.io/docker/v/saltiresoul/caddy-cf?style=for-the-badge
 
 ```
