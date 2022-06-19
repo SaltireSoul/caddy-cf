@@ -15,7 +15,7 @@ Also a few custom environment variables.
 [shieldsize]: https://img.shields.io/docker/image-size/saltiresoul/caddy-cf/latest?style=for-the-badge
 [shieldversion]: https://img.shields.io/docker/v/saltiresoul/caddy-cf?style=for-the-badge
 
-```
+```bash
 docker run -it --name caddy \
   -p 80:80 \
   -p 443:443 \
@@ -33,7 +33,7 @@ docker run -it --name caddy \
 
 Caddy does not require a full restart when configuration is changed. Caddy comes with a [caddy reload](https://caddyserver.com/docs/command-line#caddy-reload) command which can be used to reload its configuration with zero downtime.
 
-```
+```bash
 caddy_container_id=$(docker ps | grep caddy | awk '{print $1;}')
 docker exec -w /etc/caddy $caddy_container_id caddy reload
 ```
