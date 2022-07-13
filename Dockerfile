@@ -1,6 +1,5 @@
 # desired Caddy version
 ARG CADDY_VERSION
-RUN if [ -z "$CADDY_VERSION" ]; then echo >&2 "error: build argument 'CADDY_VERSION' is required" && exit 1; fi
 
 ###########
 # builder #
