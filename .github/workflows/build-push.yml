@@ -19,12 +19,12 @@ jobs:
         run: |
           caddy_version=`curl -SsL https://api.github.com/repos/caddyserver/caddy/releases/latest | jq -r '.tag_name' | head -n 1`
           caddy_version=${caddy_version#?}
-          echo "{version}=${caddy_version}" >> $GITHUB_OUTPUT
+          echo "::set-output name=version::${caddy_version}"
           docker_version=`curl -sSL 'https://registry.hub.docker.com/v2/repositories/saltiresoul/caddy-cf/tags?page_size=100' | jq -r '."results"[]["name"] | select(.=="'${caddy_version}'")'`
           if [ "${caddy_version}" == "${docker_version}" ]; then
-            echo "{new}={false}" >> $GITHUB_OUTPUT
+            echo "::set-output name=new::false"
           else
-            echo "{new}={true}" >> $GITHUB_OUTPUT            
+            echo "::set-output name=new::true"
           fi
       - name: Print outputs
         run: echo version=${{steps.check.outputs.version}}  new=${{steps.check.outputs.new}}
