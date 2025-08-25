@@ -21,8 +21,8 @@ jobs:
           caddy_version=${caddy_version#?}
           echo "version=${caddy_version}" >> $GITHUB_OUTPUT
           docker_version=`curl -sSL 'https://registry.hub.docker.com/v2/repositories/saltiresoul/caddy-cf/tags?page_size=100' | jq -r '."results"[]["name"] | select(.=="'${caddy_version}'")'`
-          is_builder_available=`curl -sSL 'https://registry.hub.docker.com/v2/repositories/library/caddy/tags?page_size=100' | jq -r '."results"[]["name"] | select(.=="'${caddy_version}-builder'")'`
-          if [ "${caddy_version}-builder" == "${is_builder_available}" ]; then
+          is_builder_available=`curl -sSL 'https://registry.hub.docker.com/v2/repositories/library/caddy/tags?page_size=100' | jq -r '."results"[]["name"] | select(.=="'${caddy_version}-builder-alpine'")'`
+          if [ "${caddy_version}-builder-alpine" == "${is_builder_available}" ]; then
             if [ "${caddy_version}" == "${docker_version}" ]; then
               echo "new=false" >> $GITHUB_OUTPUT
             else
