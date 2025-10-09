@@ -33,7 +33,31 @@ docker run -it --name caddy \
 
 Caddy does not require a full restart when configuration is changed. Caddy comes with a [caddy reload](https://caddyserver.com/docs/command-line#caddy-reload) command which can be used to reload its configuration with zero downtime.
 
+>Script:
 ```bash
 caddy_container_id=$(docker ps | grep caddy | awk '{print $1;}')
 docker exec -w /etc/caddy $caddy_container_id caddy reload
+```
+
+>Bash alias:
+```bash
+function caddyreload() {
+  local container_id
+  container_id=$(docker ps --filter "name=caddy" --format "{{.ID}}")
+
+  if [ -z "$container_id" ]; then
+    echo "❌ No running Caddy container found with name 'caddy'."
+    return 1
+  fi
+
+  echo "🔄 Reloading Caddy configuration in container $container_id..."
+  docker exec -w /etc/caddy "$container_id" caddy reload
+
+  if [ $? -eq 0 ]; then
+    echo "✅ Caddy configuration reloaded successfully."
+  else
+    echo "⚠️ Failed to reload Caddy configuration."
+    return 1
+  fi
+}
 ```
