@@ -3,6 +3,7 @@
 [Caddyserver](https://github.com/caddyserver/caddy/) with the following modules included:
 
 * [Cloudflare DNS ACME DNS-01 challenge](https://github.com/caddy-dns/cloudflare)
+* [Dynamic DNS app for Caddy](https://github.com/mholt/caddy-dynamicdns)
 
 built for AMD64, ARM64 & ARMv7
 
